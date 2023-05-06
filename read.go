@@ -2,6 +2,7 @@ package env
 
 import (
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"os"
 	"strings"
@@ -24,4 +25,14 @@ func MustRead(name string) string {
 	}
 
 	return v
+}
+
+// MustReadJSON asserts an env variable exists and it is not empty. It reads its value
+// and unmarshals it into the given destination. If the value starts with "base64://"
+// it will be decoded as well before returning.
+func MustReadJSON(name string, dest any) {
+	v := MustRead(name)
+	if err := json.Unmarshal([]byte(v), dest); err != nil {
+		panic(fmt.Sprintf("invalid json %s environment variable: %s", name, err.Error()))
+	}
 }
