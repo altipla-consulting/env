@@ -40,7 +40,12 @@ func IsKubernetes() bool {
 // the info from files or environment variables. Otherwise it will use the env variable
 // VERSION that should be set manually to the desired value.
 func Version() string {
-	// Cloud Run.
+	// Explictly set from the outside in an environment variable.
+	if v := os.Getenv("VERSION"); v != "" {
+		return v
+	}
+
+	// Cloud Run default revision name.
 	if e := os.Getenv("K_REVISION"); e != "" {
 		return e
 	}
@@ -55,8 +60,7 @@ func Version() string {
 		}
 	}
 
-	// Generic settings we have to set as custom options in each platform.
-	return os.Getenv("VERSION")
+	return ""
 }
 
 // ServiceName returns the version of the application from the environment-dependent
