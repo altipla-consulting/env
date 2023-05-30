@@ -23,7 +23,7 @@ func IsCI() bool {
 
 // IsCloudRun detects if we are running inside a Cloud Run app.
 func IsCloudRun() bool {
-	return os.Getenv("K_CONFIGURATION") != ""
+	return os.Getenv("K_CONFIGURATION") != "" || os.Getenv("CLOUD_RUN_JOB") != ""
 }
 
 // IsAzureFunction detects if we are running inside an Azure Function app.
@@ -49,6 +49,9 @@ func Version() string {
 	if e := os.Getenv("K_REVISION"); e != "" {
 		return e
 	}
+	if e := os.Getenv("CLOUD_RUN_EXECUTION"); e != "" {
+		return e
+	}
 
 	// Azure Function has a Kubu file one level up of the working directory.
 	if IsAzureFunction() {
@@ -68,6 +71,9 @@ func Version() string {
 func ServiceName() string {
 	// Cloud Run.
 	if v := os.Getenv("K_SERVICE"); v != "" {
+		return v
+	}
+	if v := os.Getenv("CLOUD_RUN_JOB"); v != "" {
 		return v
 	}
 
