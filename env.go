@@ -1,7 +1,6 @@
 package env
 
 import (
-	"io/ioutil"
 	"os"
 )
 
@@ -55,7 +54,7 @@ func Version() string {
 
 	// Azure Function has a Kubu file one level up of the working directory.
 	if IsAzureFunction() {
-		v, err := ioutil.ReadFile("../deployments/active")
+		v, err := os.ReadFile("../deployments/active")
 		if err == nil {
 			return string(v)
 		} else if !os.IsNotExist(err) {
