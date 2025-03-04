@@ -10,6 +10,12 @@ func IsLocal() bool {
 	return Version() == ""
 }
 
+// IsProduction returns true if we are running inside a production environment.
+// It depends on Version() working correctly.
+func IsProduction() bool {
+	return Version() != ""
+}
+
 // IsJenkins detects if we are running as a step of a Jenkins build.
 func IsJenkins() bool {
 	return os.Getenv("BUILD_ID") != ""
